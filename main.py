@@ -7,7 +7,7 @@ from sidepanel import SidePanel
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
-        ctk.set_appearance_mode("dark")
+        ctk.set_appearance_mode("light")
         self.geometry("1200x800+100+50")
         self.minsize(800,600)
         self.title("Map")
@@ -20,7 +20,7 @@ class App(ctk.CTk):
         self.columnconfigure(1, weight=8, uniform="a")
 
         self.map_widget = MapWidget(self, self.input_string, self.submit_location)
-        self.side_panel = SidePanel(self,self.map_widget.set_style)
+        self.side_panel = SidePanel(self,self.map_widget.set_style, self.map_widget.set_address)
 
         self.mainloop()
 
@@ -31,6 +31,7 @@ class App(ctk.CTk):
         if location:
             self.map_widget.set_address(location.address)
             self.input_string.set("")
+            self.side_panel.history_frame.add_location_entry(location)
         else:
             self.map_widget.location_entry.error_animation()
 
@@ -40,7 +41,6 @@ class MapWidget(tkintermapview.TkinterMapView):
         self.grid(row=0,column=1,sticky="nsew")
 
         self.location_entry = LocationEntry(self,input_string,submit_location)
-        # self.set_tile_server(TERRAIN_URL)
 
     def set_style(self,view_style):
         if view_style == "map":
