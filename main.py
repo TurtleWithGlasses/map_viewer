@@ -2,6 +2,7 @@ import customtkinter as ctk
 from settings import *
 import tkintermapview
 from geopy.geocoders import Nominatim
+from sidepanel import SidePanel
 
 class App(ctk.CTk):
     def __init__(self):
@@ -19,6 +20,7 @@ class App(ctk.CTk):
         self.columnconfigure(1, weight=8, uniform="a")
 
         self.map_widget = MapWidget(self, self.input_string, self.submit_location)
+        self.side_panel = SidePanel(self,self.map_widget.set_style)
 
         self.mainloop()
 
@@ -39,6 +41,14 @@ class MapWidget(tkintermapview.TkinterMapView):
 
         self.location_entry = LocationEntry(self,input_string,submit_location)
         # self.set_tile_server(TERRAIN_URL)
+
+    def set_style(self,view_style):
+        if view_style == "map":
+           self.set_tile_server(MAIN_URL)
+        elif view_style == "terrain":
+            self.set_tile_server(TERRAIN_URL)
+        elif view_style == "paint":
+            self.set_tile_server(PAINT_URL)
 
 class LocationEntry(ctk.CTkEntry):
     def __init__(self,parent,input_string,submit_location):
